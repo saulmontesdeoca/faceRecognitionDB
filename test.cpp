@@ -28,6 +28,26 @@ int main(int, char**) {
     std::cout << bsoncxx::to_json(doc) << "\n";
     }
 
+    //Create
+    auto builder = bsoncxx::builder::stream::document{};
+    bsoncxx::document::value doc_value = builder
+    << "nombre" << "Juan Carlos Hurtado"
+    << "edad" << 22
+    << "matricula" << "A01029354"
+    << "identificacionFacial" << bsoncxx::builder::stream::open_document
+        << "rostro1" << bsoncxx::builder::stream::open_array
+            << 32 << 54 << 87 << -33 << 12
+            << bsoncxx::builder::stream::close_array
+        << "rostro2" << bsoncxx::builder::stream::open_array
+            << 32 << 54 << 87 << -33 << 12
+            << bsoncxx::builder::stream::close_array
+        << "rostro3" << bsoncxx::builder::stream::open_array
+            << 32 << 54 << 87 << -33 << 12
+            << bsoncxx::builder::stream::close_array
+    << bsoncxx::builder::stream::close_document
+    << bsoncxx::builder::stream::finalize;
+
+    bsoncxx::stdx::optional<mongocxx::result::insert_one> result = coll.insert_one(doc_value.view()); //Inserting Document
 
 
 }
