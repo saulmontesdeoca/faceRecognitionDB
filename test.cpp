@@ -2,6 +2,9 @@
 #include <vector>
 #include <cstdint>
 #include <mongocxx/uri.hpp>
+#include <opencv2/core/mat.hpp>
+
+
 
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
