@@ -57,15 +57,13 @@ void readAll(){
     std::cout << bsoncxx::to_json(doc) << "\n";
     }
 }
-void readOne(string id){
+void readOne(string matricula){
     bsoncxx::stdx::optional<bsoncxx::document::value> doc =
-    coll.find_one(bsoncxx::builder::stream::document{} << "_id" 
-    << bsoncxx::builder::stream::open_document
-    << "$oid" << id
-    << bsoncxx::builder::stream::close_document
+    coll.find_one(bsoncxx::builder::stream::document{} << "matricula" << matricula
     << bsoncxx::builder::stream::finalize);
     cout << bsoncxx::to_json(doc->view()) << "\n";
 }
+//Read with id
 // void readOne(string id){
 //     //bsoncxx::oid oid = bson[id].get_oid().value;
 //     //bsoncxx::oid myoid(accountId);
@@ -88,22 +86,21 @@ void updateMatricula(string matricula, string nuevaMatricula){
                         << bsoncxx::builder::stream::finalize);
 }
 //Delete
-void deleteOne(string nombre){
-    coll.delete_one(bsoncxx::builder::stream::document{} << "nombre" << nombre << bsoncxx::builder::stream::finalize);
+void deleteOne(string matricula){
+    coll.delete_one(bsoncxx::builder::stream::document{} << "matricula" << matricula << bsoncxx::builder::stream::finalize);
 }
  
 int main(int, char**) {
 
     //Create
-    //create("Victor Coeto", 21, "A01024637", "https://www.thispersondoesnotexist.com/image");
+    //create("Luis Garcia", 21, "A01021111", "https://www.thispersondoesnotexist.com/image");
     //Read
     //readAll();
-    //readOne("5e818f73fbb03685bf11a4a0");
+    //readOne("A01021111");
     //Update
-    // updateName("Luis Garcia ","Victor Coeto");
-    // updateMatricula("A01025975", "A01025986");
+    //updateName("Luis Garcia ","Victor Coeto");
+    // updateMatricula("A01021111", "A01025986");
     //Delete
-    deleteOne("Victor Coeto");
-
+    //deleteOne("Victor Coeto");
 
 }
