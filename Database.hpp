@@ -9,9 +9,9 @@ Database::~Database()
 }
 
 //Create
-void Database::create(string nombre, int edad, string matricula, string imgURL, Mat m){
+void Database::create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m){
         // //WRITE yml to store    
-    FileStorage storage("data.yml.gz", FileStorage::WRITE | FileStorage::MEMORY);
+   cv::FileStorage storage("data.yml.gz", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
     storage << "data" << m;
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
@@ -27,7 +27,7 @@ void Database::create(string nombre, int edad, string matricula, string imgURL, 
 
     bsoncxx::stdx::optional<mongocxx::result::insert_one> result = 
     coll.insert_one(doc_value.view()); //Inserting Document
-    cout << "Inserted " << result->inserted_id().get_oid().value.to_string() << endl;
+    std::cout << "Inserted " << result->inserted_id().get_oid().value.to_string() << std::endl;
 }
 
 //Read
@@ -38,15 +38,15 @@ void Database::readAll(){
     }
 }
 
-void Database::readOne(string matricula){
+void Database::readOne(std::string matricula){
     bsoncxx::stdx::optional<bsoncxx::document::value> doc =
     coll.find_one(bsoncxx::builder::stream::document{} << "matricula" << matricula
     << bsoncxx::builder::stream::finalize);
-    cout << bsoncxx::to_json(doc->view()) << "\n";
+    std::cout << bsoncxx::to_json(doc->view()) << "\n";
 }
 
 //Read with id
-// void Database::readOne(string id){
+// void Database::readOne(std::string id){
 //     //bsoncxx::oid oid = bson[id].get_oid().value;
 //     //bsoncxx::oid myoid(accountId);
 //     bsoncxx::stdx::optional<bsoncxx::document::value> doc =
@@ -55,14 +55,14 @@ void Database::readOne(string matricula){
 // }
 
 //Update
-void Database::updateName(string nombre, string nuevoNombre){
+void Database::updateName(std::string nombre, std::string nuevoNombre){
     coll.update_one(bsoncxx::builder::stream::document{} << "nombre" << nombre << bsoncxx::builder::stream::finalize,
                       bsoncxx::builder::stream::document{} << "$set" << bsoncxx::builder::stream::open_document <<
                         "nombre" << nuevoNombre << bsoncxx::builder::stream::close_document 
                         << bsoncxx::builder::stream::finalize);
 }
 
-void Database::updateMatricula(string matricula, string nuevaMatricula){
+void Database::updateMatricula(std::string matricula, std::string nuevaMatricula){
     coll.update_one(bsoncxx::builder::stream::document{} << "matricula" << matricula << bsoncxx::builder::stream::finalize,
                       bsoncxx::builder::stream::document{} << "$set" << bsoncxx::builder::stream::open_document <<
                         "matricula" << nuevaMatricula << bsoncxx::builder::stream::close_document 
@@ -70,12 +70,19 @@ void Database::updateMatricula(string matricula, string nuevaMatricula){
 }
 
 //Delete
-void Database::deleteOne(string matricula){
+void Database::deleteOne(std::string matricula){
     coll.delete_one(bsoncxx::builder::stream::document{} << "matricula" << matricula << bsoncxx::builder::stream::finalize);
 }
-Mat Database::readMat(string matricula)
+cv::Mat Database::readMat(std::string matricula)
 {
-    Mat m;
-
+    cv::Mat m;
+    bsoncxx::stdx::optional<bsoncxx::document::value> doc =
+    coll.find_one(bsoncxx::builder::stream::document{} << "matricula" << matricula
+    << bsoncxx::builder::stream::finalize);
+    bsoncxx::document::view view = doc->view();
+    auto matString = view["identificacionFacial"][0].get_utf8().value.to_string();
+    cv::FileStorage fs(matString, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+    fs["data"] >> m;
+    fs.release();
     return m;
 };

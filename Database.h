@@ -15,9 +15,6 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
 
-using namespace std;
-using namespace cv;
-
 //TODO: try catch connection to db
 // Creando la conexion al cluster
 
@@ -33,13 +30,13 @@ class Database
 public:
     Database(/* args */);
     ~Database();
-    void create(string nombre, int edad, string matricula, string imgURL, Mat m);
+    void create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m);
     void readAll();
-    void readOne(string matricula);
-    void updateName(string nombre, string nuevoNombre);
-    void updateMatricula(string matricula, string nuevaMatricula);
-    void deleteOne(string matricula);
-    Mat readMat(string matricula);
+    void readOne(std::string matricula);
+    void updateName(std::string nombre, std::string nuevoNombre);
+    void updateMatricula(std::string matricula, std::string nuevaMatricula);
+    void deleteOne(std::string matricula);
+    cv::Mat readMat(std::string matricula);
 };
 
 #endif
