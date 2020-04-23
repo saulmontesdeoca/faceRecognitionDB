@@ -15,7 +15,7 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
 
-#include "EnvironmentVariables.hpp"
+#include "EnvironmentVariables.h"
 
 //TODO: try catch connection to db
 // Creando la conexion al cluster
