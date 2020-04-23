@@ -84,7 +84,7 @@ cv::Mat Database::readMat(std::string matricula)
     bsoncxx::document::view view = doc->view();
     auto matString = view["identificacionFacial"][0].get_utf8().value.to_string();
     std::cout << matString << std::endl;
-    cv::FileStorage fs(matString, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+    cv::FileStorage fs(matString, cv::FileStorage::READ);
     fs["data"] >> m;
     fs.release();
     return m;

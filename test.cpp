@@ -21,6 +21,7 @@ int main(int, char**) {
     //db.deleteOne("Victor Coeto");
 
     Mat  m2 = db.readMat("route2");
+
     imshow("m2", m2);
     waitKey();
 
