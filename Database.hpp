@@ -11,8 +11,8 @@ Database::~Database()
 //Create
 void Database::create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m){
         // //WRITE yml to store 
-    std::string fileRoute =  "/MatFiles/" + matricula + ".xml.gz";  
-   cv::FileStorage storage(fileRoute, cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+    std::string fileRoute =  "./MatFiles/" + matricula + ".yml.gz";  
+   cv::FileStorage storage(fileRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
     storage << "data" << m;
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
@@ -25,10 +25,11 @@ void Database::create(std::string nombre, int edad, std::string matricula, std::
     << bsoncxx::builder::stream::close_array
     << bsoncxx::builder::stream::finalize;
 
-    storage.release();
     bsoncxx::stdx::optional<mongocxx::result::insert_one> result = 
     coll.insert_one(doc_value.view()); //Inserting Document
     std::cout << "Inserted " << result->inserted_id().get_oid().value.to_string() << std::endl;
+    storage.release();
+
 }
 
 //Read
@@ -82,6 +83,7 @@ cv::Mat Database::readMat(std::string matricula)
     << bsoncxx::builder::stream::finalize);
     bsoncxx::document::view view = doc->view();
     auto matString = view["identificacionFacial"][0].get_utf8().value.to_string();
+    std::cout << matString << std::endl;
     cv::FileStorage fs(matString, cv::FileStorage::READ | cv::FileStorage::MEMORY);
     fs["data"] >> m;
     fs.release();
