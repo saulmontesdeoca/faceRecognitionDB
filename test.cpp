@@ -1,16 +1,16 @@
-#include "Database.cpp"
+#include "DBManagerInterface.cpp"
 
 using namespace cv;
 using namespace std;
 
 int main() {
 
-    Database db(URI, DATABASE, COLLECTION);
+    DBManagerInterface dbManager(URI, DATABASE, COLLECTION);
     Mat m = imread( "img.jpg",1);
     Mat m2 = imread( "img.jpg",1);
 
     //Create
-    db.create("route2", 222, "route3", m2, m);
+    dbManager.create("route4", 222, "route4", m2, m);
     //Read
     //db.readAll();
     //db.readOne("A01021111");
