@@ -7,10 +7,10 @@ int main(int, char**) {
 
     Database db;
 
-    //Mat m = imread( "img.jpg",1);
+    Mat m = imread( "img.jpg",1);
 
     //Create
-    //db.create("YAML.GZ", 1, "PruebaGZ", "https://www.thispersondoesnotexist.com/image", m);
+    db.create("routeTest2", 8, "routetest2", "RouteTest2", m);
     //Read
     //db.readAll();
     //db.readOne("A01021111");
@@ -20,8 +20,8 @@ int main(int, char**) {
     //Delete
     //db.deleteOne("Victor Coeto");
 
-    Mat  m2 = db.readMat("Prueba");
-    imshow("m2", m2);
-    waitKey();
+    // Mat  m2 = db.readMat("Prueba");
+    // imshow("m2", m2);
+    // waitKey();
 
 }

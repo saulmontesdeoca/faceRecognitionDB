@@ -10,8 +10,9 @@ Database::~Database()
 
 //Create
 void Database::create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m){
-        // //WRITE yml to store    
-   cv::FileStorage storage("data.yml.gz", cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
+        // //WRITE yml to store 
+    std::string fileRoute =  "/MatFiles/" + matricula + ".xml.gz";  
+   cv::FileStorage storage(fileRoute, cv::FileStorage::WRITE | cv::FileStorage::MEMORY);
     storage << "data" << m;
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
@@ -20,11 +21,11 @@ void Database::create(std::string nombre, int edad, std::string matricula, std::
     << "edad" << edad
     << "matricula" << matricula
     << "identificacionFacial" << bsoncxx::builder::stream::open_array
-        << storage.releaseAndGetString()
+        << fileRoute
     << bsoncxx::builder::stream::close_array
     << bsoncxx::builder::stream::finalize;
 
-
+    storage.release();
     bsoncxx::stdx::optional<mongocxx::result::insert_one> result = 
     coll.insert_one(doc_value.view()); //Inserting Document
     std::cout << "Inserted " << result->inserted_id().get_oid().value.to_string() << std::endl;
