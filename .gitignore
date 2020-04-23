@@ -1,3 +1,7 @@
 test
 .vscode
 MatFiles
+EnvironmentVariables.h
+test.dSYM
+*.yml
+*.jpg

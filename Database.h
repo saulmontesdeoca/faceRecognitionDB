@@ -15,11 +15,13 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
 
+#include "EnvironmentVariables.hpp"
+
 //TODO: try catch connection to db
 // Creando la conexion al cluster
 
 mongocxx::instance instance{};
-mongocxx::client conn{mongocxx::uri{"mongodb+srv://saul-admin:Saul098923.23@cluster0-f1rg5.mongodb.net/DataBase?retryWrites=true&w=majority"}};
+mongocxx::client conn{mongocxx::uri{URI}};
 //Seleccionando la base de datos Cuatecs
 mongocxx::database db = conn["cuatecs"];
 //Seleccionando la coleccion
@@ -37,6 +39,7 @@ public:
     void updateMatricula(std::string matricula, std::string nuevaMatricula);
     void deleteOne(std::string matricula);
     cv::Mat readMat(std::string matricula);
+    void matMatch(cv::Mat m);
 };
 
 #endif

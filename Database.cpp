@@ -89,3 +89,7 @@ cv::Mat Database::readMat(std::string matricula)
     fs.release();
     return m;
 };
+void Database::matMatch(cv::Mat m){
+    //Iterate throught documents a retrieve mats
+    
+}

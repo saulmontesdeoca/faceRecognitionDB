@@ -3,7 +3,7 @@
 using namespace cv;
 using namespace std;
 
-int main(int, char**) {
+int main() {
 
     Database db;
 
