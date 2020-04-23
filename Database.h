@@ -17,22 +17,15 @@
 
 #include "EnvironmentVariables.h"
 
-//TODO: try catch connection to db
-// Creando la conexion al cluster
-
-mongocxx::instance instance{};
-mongocxx::client conn{mongocxx::uri{URI}};
-//Seleccionando la base de datos Cuatecs
-mongocxx::database db = conn["cuatecs"];
-//Seleccionando la coleccion
-mongocxx::collection coll = db["subjects"];
-
 class Database
 {
 public:
-    Database(/* args */);
+    mongocxx::database db;
+    mongocxx::client conn;
+    mongocxx::collection coll;
+    Database(std::string uri, std::string db, std::string coll);
     ~Database();
-    void create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m);
+    void create(std::string nombre, int edad, std::string matricula, cv::Mat imgURL, cv::Mat m);
     void readAll();
     void readOne(std::string matricula);
     void updateName(std::string nombre, std::string nuevoNombre);

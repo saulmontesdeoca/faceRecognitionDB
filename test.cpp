@@ -5,12 +5,12 @@ using namespace std;
 
 int main() {
 
-    Database db;
-
-    //Mat m = imread( "img.jpg",1);
+    Database db(URI, DATABASE, COLLECTION);
+    Mat m = imread( "img.jpg",1);
+    Mat m2 = imread( "img.jpg",1);
 
     //Create
-    //db.create("route2", 222, "route2", "route2", m);
+    db.create("route2", 222, "route3", m2, m);
     //Read
     //db.readAll();
     //db.readOne("A01021111");
@@ -20,9 +20,9 @@ int main() {
     //Delete
     //db.deleteOne("Victor Coeto");
 
-    Mat  m2 = db.readMat("route2");
+    // Mat  m2 = db.readMat("route2");
 
-    imshow("m2", m2);
-    waitKey();
+    // imshow("m2", m2);
+    // waitKey();
 
 }

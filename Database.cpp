@@ -1,35 +1,43 @@
 #include "Database.h"
 
-Database::Database()
+Database::Database(std::string uri, std::string database, std::string collection)
 {
+        mongocxx::instance instance{};
+        conn = mongocxx::uri{uri};
+        //Seleccionando la base de datos Cuatecs
+        db = conn[database];
+        //Seleccionando la coleccion
+        coll = db[collection];
 }
 
 Database::~Database()
 {
 }
-
 //Create
-void Database::create(std::string nombre, int edad, std::string matricula, std::string imgURL, cv::Mat m){
+void Database::create(std::string nombre, int edad, std::string matricula, cv::Mat img, cv::Mat feature){
         // //WRITE yml to store 
-    std::string fileRoute =  "./MatFiles/" + matricula + ".yml.gz";  
-   cv::FileStorage storage(fileRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
-    storage << "data" << m;
+    std::string matRoute =  "./MatFiles/" + matricula + ".xml.gz";  
+    std::string imgRoute =  "./ImgFiles/" + matricula + ".xml.gz";  
+    cv::FileStorage featureStorage(matRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
+    cv::FileStorage imgStorage(imgRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
+    featureStorage << "data" << feature;
+    imgStorage << "data" << img;
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
     << "nombre" << nombre
-    << "imgURL" << imgURL
+    << "imgURL" << imgRoute
     << "edad" << edad
     << "matricula" << matricula
     << "identificacionFacial" << bsoncxx::builder::stream::open_array
-        << fileRoute
+        << matRoute
     << bsoncxx::builder::stream::close_array
     << bsoncxx::builder::stream::finalize;
 
     bsoncxx::stdx::optional<mongocxx::result::insert_one> result = 
     coll.insert_one(doc_value.view()); //Inserting Document
     std::cout << "Inserted " << result->inserted_id().get_oid().value.to_string() << std::endl;
-    storage.release();
-
+    featureStorage.release();
+    imgStorage.release();
 }
 
 //Read

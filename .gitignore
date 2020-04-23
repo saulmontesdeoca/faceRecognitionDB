@@ -1,6 +1,7 @@
 test
 .vscode
 MatFiles
+ImgFiles
 EnvironmentVariables.h
 test.dSYM
 *.yml
