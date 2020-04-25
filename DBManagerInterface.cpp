@@ -15,17 +15,19 @@ DBManagerInterface::~DBManagerInterface()
 }
 //Create
 void DBManagerInterface::create(std::string nombre, int edad, std::string matricula, cv::Mat img, cv::Mat feature){
+    bsoncxx::oid _oid;
         // //WRITE yml to store 
-    std::string matRoute =  "./MatFiles/" + matricula + ".xml.gz";  
-    std::string imgRoute =  "./ImgFiles/" + matricula + ".xml.gz";  
+    std::string matRoute =  "./MatFiles/" + _oid.to_string() + ".xml.gz";  
+    std::string imgRoute =  "./ImgFiles/" + _oid.to_string() + ".xml.gz";  
     cv::FileStorage featureStorage(matRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
     cv::FileStorage imgStorage(imgRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
     featureStorage << "data" << feature;
     imgStorage << "data" << img;
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
+    << "_id" << _oid
     << "nombre" << nombre
-    << "imgURL" << imgRoute
+    << "img" << imgRoute
     << "edad" << edad
     << "matricula" << matricula
     << "identificacionFacial" << bsoncxx::builder::stream::open_array
@@ -55,6 +57,16 @@ void DBManagerInterface::readOne(std::string matricula){
     std::cout << bsoncxx::to_json(doc->view()) << "\n";
 }
 
+std::string DBManagerInterface::readOid(std::string matricula)
+{
+    bsoncxx::stdx::optional<bsoncxx::document::value> doc =
+    coll.find_one(bsoncxx::builder::stream::document{} << "matricula" << matricula
+    << bsoncxx::builder::stream::finalize);
+    bsoncxx::document::view view = doc->view();
+    bsoncxx::document::element id_ele = view["_id"];
+    std::string oid = id_ele.get_oid().value.to_string();
+    return oid;
+};
 //Read with id
 // void DBManagerInterface::readOne(std::string id){
 //     //bsoncxx::oid oid = bson[id].get_oid().value;
@@ -98,6 +110,6 @@ cv::Mat DBManagerInterface::readMat(std::string matricula)
     return m;
 };
 void DBManagerInterface::matMatch(cv::Mat m){
-    //Iterate throught documents a retrieve mats
+    //Iterate throught documents and retrieve mats
     
 }

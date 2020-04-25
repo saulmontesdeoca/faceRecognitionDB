@@ -33,6 +33,7 @@ public:
     void deleteOne(std::string matricula);
     cv::Mat readMat(std::string matricula);
     void matMatch(cv::Mat m);
+    std::string readOid(std::string matricula);
 };
 
 #endif
