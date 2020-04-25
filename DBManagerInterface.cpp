@@ -2,12 +2,12 @@
 
 DBManagerInterface::DBManagerInterface(std::string uri, std::string database, std::string collection)
 {
-        mongocxx::instance instance{};
-        conn = mongocxx::uri{uri};
-        //Seleccionando la base de datos Cuatecs
-        db = conn[database];
-        //Seleccionando la coleccion
-        coll = db[collection];
+    mongocxx::instance instance{};
+    conn = mongocxx::uri{uri};
+    //Seleccionando la base de datos Cuatecs
+    db = conn[database];
+    //Seleccionando la coleccion
+    coll = db[collection];
 }
 
 DBManagerInterface::~DBManagerInterface()
@@ -46,7 +46,7 @@ void DBManagerInterface::create(std::string nombre, int edad, std::string matric
 void DBManagerInterface::readAll(){
     mongocxx::cursor cursor = coll.find({});
     for(auto doc : cursor) {
-    std::cout << bsoncxx::to_json(doc) << "\n";
+        std::cout << bsoncxx::to_json(doc) << "\n";
     }
 }
 
@@ -109,7 +109,11 @@ cv::Mat DBManagerInterface::readMat(std::string matricula)
     fs.release();
     return m;
 };
-void DBManagerInterface::matMatch(cv::Mat m){
+void DBManagerInterface::matMatch(){
     //Iterate throught documents and retrieve mats
-    
+    mongocxx::cursor cursor = coll.find({});
+    for(auto doc : cursor) {
+        bsoncxx::document::element nombre = doc["nombre"];
+        std::cout << nombre.get_utf8().value.to_string() << std::endl;
+    }
 }

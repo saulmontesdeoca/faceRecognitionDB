@@ -6,6 +6,8 @@
 
 #include <opencv2/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "opencv2/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
 
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
@@ -32,7 +34,7 @@ public:
     void updateMatricula(std::string matricula, std::string nuevaMatricula);
     void deleteOne(std::string matricula);
     cv::Mat readMat(std::string matricula);
-    void matMatch(cv::Mat m);
+    void matMatch();
     std::string readOid(std::string matricula);
 };
 
