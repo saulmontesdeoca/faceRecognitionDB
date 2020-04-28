@@ -33,8 +33,7 @@ public:
     void updateName(std::string nombre, std::string nuevoNombre);
     void updateMatricula(std::string matricula, std::string nuevaMatricula);
     void deleteOne(std::string matricula);
-    cv::Mat readMat(std::string matricula);
-    void matMatch();
+    cv::Mat readFeatures(std::string matricula);
     std::string readOid(std::string matricula);
 };
 
