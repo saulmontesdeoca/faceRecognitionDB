@@ -71,14 +71,6 @@ std::string DBManagerInterface::readOid(std::string matricula)
     std::string oid = id_ele.get_oid().value.to_string();
     return oid;
 };
-//Read with id
-// void DBManagerInterface::readOne(std::string id){
-//     //bsoncxx::oid oid = bson[id].get_oid().value;
-//     //bsoncxx::oid myoid(accountId);
-//     bsoncxx::stdx::optional<bsoncxx::document::value> doc =
-//     coll.find_one(bsoncxx::builder::stream::document{} << "nombre" << id << bsoncxx::builder::stream::finalize);
-//     cout << bsoncxx::to_json(doc->view()) << "\n";
-// }
 
 //Update
 void DBManagerInterface::updateName(std::string nombre, std::string nuevoNombre)
