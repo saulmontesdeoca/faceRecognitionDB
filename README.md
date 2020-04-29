@@ -76,6 +76,3 @@ https://www.mongodb.com/dr/fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plu
 Ya que tenemos los servidores necesitamos iniciar una consola y escribimos mongo para inicializar el servidor y poder editar. Como no vamos a usar la base de datos con el código podemos salir con el comando exit.  
 Ahora abrimos compass y seleccionamos localhost, luego vamos al botón verde y ponemos conectar. 
  
-Listo ahora probamos con el código anexado al ZIP. Recuerden todo tiene que ser desde Visual Studio 2017. Podemos comprobar la información desde Compass.
- 
- 
