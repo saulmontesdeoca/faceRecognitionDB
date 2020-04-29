@@ -29,5 +29,6 @@ int main()
     // imshow("m2", m2);
     // waitKey();
     //dbManager.matMatch();
+    cout << "CMake funciona" << endl;
     return 0;
 }
