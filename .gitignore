@@ -1,5 +1,3 @@
-test
 .vscode
-MatFiles
-ImgFiles
-test.dSYM
+build
+*.xml.gz
