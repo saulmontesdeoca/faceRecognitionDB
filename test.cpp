@@ -7,14 +7,14 @@ using namespace std;
 int main()
 {
 
-    //DBManagerInterface dbManager(URI, DATABASE, COLLECTION);
+    DBManagerInterface dbManager(URI, DATABASE, COLLECTION);
 
-    //dbManager.readOid("oid");
-    // Mat m = imread( "img.jpg",1);
-    // Mat m2 = imread( "img.jpg",1);
+    // string oid = dbManager.readOid("oid");
+    Mat m = imread("lena.jpg", 1);
+    Mat m2 = imread("lena.jpg", 1);
 
     //Create
-    // dbManager.create("oid", 111, "oid", m2, m);
+    dbManager.create("cmake", 11, "cmake", m2, m);
     //Read
     //dbManager.readAll();
     //dbManager.readOne("A01021111");
@@ -29,6 +29,5 @@ int main()
     // imshow("m2", m2);
     // waitKey();
     //dbManager.matMatch();
-    cout << "CMake funciona" << endl;
     return 0;
 }
