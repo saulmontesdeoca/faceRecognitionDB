@@ -18,7 +18,7 @@
 #include <mongocxx/instance.hpp>
 
 #include "EnvironmentVariables.h"
-
+#include "../Cuatec.cpp"
 class DBManagerInterface
 {
 public:
@@ -27,9 +27,9 @@ public:
     mongocxx::collection coll;
     DBManagerInterface(std::string uri, std::string db, std::string coll);
     ~DBManagerInterface();
-    void create(std::string nombre, int edad, std::string matricula, cv::Mat imgURL, cv::Mat m);
+    void create(Cuatec cuatec);
     void readAll();
-    void readOne(std::string matricula);
+    Cuatec readOne(std::string matricula);
     void updateName(std::string nombre, std::string nuevoNombre);
     void updateMatricula(std::string matricula, std::string nuevaMatricula);
     void deleteOne(std::string matricula);

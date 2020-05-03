@@ -3,6 +3,7 @@
 DBManagerInterface::DBManagerInterface(std::string uri, std::string database, std::string collection)
 {
     mongocxx::instance instance{};
+    // mongocxx::client conn{mongocxx::uri{}};
     conn = mongocxx::uri{uri};
     //Seleccionando la base de datos Cuatecs
     db = conn[database];
@@ -14,7 +15,7 @@ DBManagerInterface::~DBManagerInterface()
 {
 }
 //Create
-void DBManagerInterface::create(std::string nombre, int edad, std::string matricula, cv::Mat img, cv::Mat feature)
+void DBManagerInterface::create(Cuatec cuatec)
 {
     bsoncxx::oid _oid;
     // //WRITE yml to store
@@ -22,18 +23,16 @@ void DBManagerInterface::create(std::string nombre, int edad, std::string matric
     std::string imgRoute = "../storage/ImgFiles/" + _oid.to_string() + ".xml.gz";
     cv::FileStorage featureStorage(matRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
     cv::FileStorage imgStorage(imgRoute, cv::FileStorage::WRITE | cv::FileStorage::FORMAT_YAML);
-    featureStorage << "data" << feature;
-    imgStorage << "data" << img;
+    featureStorage << "data" << cuatec.getFeatures();
+    imgStorage << "data" << cuatec.getImg();
     auto builder = bsoncxx::builder::stream::document{};
     bsoncxx::document::value doc_value = builder
                                          << "_id" << _oid
-                                         << "nombre" << nombre
+                                         << "nombre" << cuatec.getNombre()
                                          << "img" << imgRoute
-                                         << "edad" << edad
-                                         << "matricula" << matricula
-                                         << "identificacionFacial" << bsoncxx::builder::stream::open_array
-                                         << matRoute
-                                         << bsoncxx::builder::stream::close_array
+                                         << "edad" << cuatec.getEdad()
+                                         << "matricula" << cuatec.getMatricula()
+                                         << "identificacionFacial" << matRoute
                                          << bsoncxx::builder::stream::finalize;
 
     bsoncxx::stdx::optional<mongocxx::result::insert_one> result =
@@ -53,12 +52,26 @@ void DBManagerInterface::readAll()
     }
 }
 
-void DBManagerInterface::readOne(std::string matricula)
+Cuatec DBManagerInterface::readOne(std::string matricula)
 {
     bsoncxx::stdx::optional<bsoncxx::document::value> doc =
         coll.find_one(bsoncxx::builder::stream::document{} << "matricula" << matricula
                                                            << bsoncxx::builder::stream::finalize);
-    std::cout << bsoncxx::to_json(doc->view()) << "\n";
+    bsoncxx::document::view view = doc->view();
+    std::string nombre = view["nombre"].get_utf8().value.to_string();
+    int edad = view["edad"].get_int32(); //Checar
+    cv::Mat imgMat;
+    auto imgMatString = view["img"].get_utf8().value.to_string();
+    cv::FileStorage fs(imgMatString, cv::FileStorage::READ);
+    fs["data"] >> imgMat;
+    fs.release();
+    cv::Mat featuresMat;
+    auto featuresMatString = view["identificacionFacial"].get_utf8().value.to_string();
+    cv::FileStorage fs2(featuresMatString, cv::FileStorage::READ);
+    fs2["data"] >> featuresMat;
+    fs2.release();
+    Cuatec cuatec(nombre, edad, matricula, imgMat, featuresMat);
+    return cuatec;
 }
 
 std::string DBManagerInterface::readOid(std::string matricula)
